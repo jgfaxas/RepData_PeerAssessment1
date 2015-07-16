@@ -8,7 +8,8 @@ output:
 
 ## Loading and preprocessing the data
 Assuming the data is in working directory, the data file is loaded and variables "date" and "interval" are casting to Date format and Factor format.
-```{r}
+
+```r
 data<-read.csv("activity.csv")
 data$date<-as.Date(data$date)
 data$interval<-as.factor(data$interval)
@@ -20,40 +21,76 @@ data$interval<-as.factor(data$interval)
 
 The first step is to calculate the total number of steps taken per day:
 
-```{r}
+
+```r
 stepsPerDay<-tapply(data$steps,data$date,sum)
 ```
 
 A Histogram of the total number of steps taken per day is maked:
 
-```{r}
+
+```r
 hist(stepsPerDay,breaks=10)
 ```
 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+
 Finally, to answer the question, the mean and median are calculated:
 
-```{r}
+
+```r
 mean(stepsPerDay,na.rm=TRUE)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(stepsPerDay,na.rm = TRUE)
+```
+
+```
+## [1] 10765
 ```
 
 ## What is the average daily activity pattern?
 
 This question can be answered by calculating the average number of steps per interval and them making a time series plot of 5 mins interval:
-```{r}
+
+```r
 stepsPerMins<-tapply(data$steps,data$interval,mean,na.rm=TRUE)
 plot(as.numeric(names(stepsPerMins)),stepsPerMins,type="l")
 ```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 The 5-minute interval, on average across all the days in the dataset that  contains the maximum number of steps is the 835, calculated by the following code:
-```{r}
+
+```r
 names(which.max(stepsPerMins))
+```
+
+```
+## [1] "835"
 ```
 
 ## Imputing missing values
 
 The total number of missing values in the data set is given by the summary function:
-```{r}
+
+```r
 summary(data)
+```
+
+```
+##      steps             date               interval    
+##  Min.   :  0.00   Min.   :2012-10-01   0      :   61  
+##  1st Qu.:  0.00   1st Qu.:2012-10-16   5      :   61  
+##  Median :  0.00   Median :2012-10-31   10     :   61  
+##  Mean   : 37.38   Mean   :2012-10-31   15     :   61  
+##  3rd Qu.: 12.00   3rd Qu.:2012-11-15   20     :   61  
+##  Max.   :806.00   Max.   :2012-11-30   25     :   61  
+##  NA's   :2304                          (Other):17202
 ```
 As we can see, the column "steps" is the only variable that has NA's values, with a total of 2304.
 
@@ -61,19 +98,40 @@ The strategy used for imputate the NA values is to use the average number of ste
 
 To implement this strategy, a function called "lookvalue" is created. The function takes the "interval"" corresponding to the "steps" observation with NA value and return the average steps per 5-minutes interval. Later, a new dataset is created and the NA's values are replace by the average steps per 5-minutes interval.
 
-```{r}
+
+```r
 lookValue<-function(x,y) y[as.character(x)] 
 data2=data
 data2$steps<-replace(data2$steps,is.na(data2$steps),lookValue(data2$interval[is.na(data2$steps)],stepsPerMins))
 ```
 
 The difference between data with NA's and without NA's can seen by calculaten the mean/median of total steps per day and making a histogram
-```{r}
-#Calculate mean and median for the completed data set
+
+```r
+#Calculate mean and median for the completed data sete
 stepsPerDay2<-tapply(data2$steps,data2$date,sum)
 hist(stepsPerDay2,breaks=length(stepsPerDay2))
+```
+
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
+
+```r
 mean(stepsPerDay2)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(stepsPerDay2)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 #calculating the mean of  steps per interval
 stepsPerMins2<-tapply(data2$steps,data2$interval,mean)
 ```
@@ -83,14 +141,18 @@ Without NA's, mean and median are the same.The histogram shows a great increase 
 
 To answer this question, a factor variable with two leves has been created.
 
-```{r}
+
+```r
 data2$weekday<-!(weekdays(data2$date)=="domingo"|weekdays(data2$date)=="sabado")
 data2$weekday<-as.factor(data2$weekday)
 levels(data2$weekday)<-c("weekend","weekday")
 ```
 
 Later, a set arranged by 5-minutes interval and weekday/weekend is created. A plot shows the average number of steps taken, averaged across all weekday days or weekend days.
-```{r}
+
+```r
 library(lattice)
 xyplot(steps~interval|weekday,data=stepsWeekday,layout=c(1,2),type="l")
 ```
+
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
