@@ -76,7 +76,7 @@ median(stepsPerDay2)
 #calculating the mean of  steps per interval
 stepsPerMins2<-tapply(data2$steps,data2$interval,mean)
 ```
-Without NA's, mean and median are the same.The histogram shows a great increase in the frequency of days with 10000 to 11000 steps.
+With NA's replaced, mean and median are the same.The histogram shows a great increase in the frequency of days with 10000 to 11000 steps.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
