@@ -157,4 +157,5 @@ xyplot(steps~interval|weekday,data=stepsWeekday,layout=c(1,2),type="l")
 ```
 
 ![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
+
 As can be seen in the plot, there is an important peak about the interval "800" on weekdays. This agree with the interval that contains the maximum number of steps, which is 835. In can be said that the exercise routine is often on weekdays.
