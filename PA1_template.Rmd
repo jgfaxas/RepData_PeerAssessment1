@@ -7,11 +7,10 @@ output:
 
 
 ## Loading and preprocessing the data
-Assuming the data is in working directory, the data file is loaded and variables "date" and "interval" are casting to Date format and Factor format.
+Assuming the data is in working directory, the data file is loaded and variables "date" is changed to Date format.
 ```{r}
 data<-read.csv("activity.csv")
 data$date<-as.Date(data$date)
-data$interval<-as.factor(data$interval)
 ```
 
 
@@ -71,7 +70,7 @@ The difference between data with NA's and without NA's can seen by calculaten th
 ```{r}
 #Calculate mean and median for the completed data set
 stepsPerDay2<-tapply(data2$steps,data2$date,sum)
-hist(stepsPerDay2,breaks=length(stepsPerDay2))
+hist(stepsPerDay2,breaks=10)
 mean(stepsPerDay2)
 median(stepsPerDay2)
 #calculating the mean of  steps per interval
@@ -94,3 +93,4 @@ Later, a set arranged by 5-minutes interval and weekday/weekend is created. A pl
 library(lattice)
 xyplot(steps~interval|weekday,data=stepsWeekday,layout=c(1,2),type="l")
 ```
+As can be seen in the plot, there is an important peak about the interval "800" on weekdays. This agree with the interval that contains the maximum number of steps, which is 835. In can be said that the exercise routine is often on weekdays.

@@ -7,12 +7,11 @@ output:
 
 
 ## Loading and preprocessing the data
-Assuming the data is in working directory, the data file is loaded and variables "date" and "interval" are casting to Date format and Factor format.
+Assuming the data is in working directory, the data file is loaded and variables "date" is changed to Date format.
 
 ```r
 data<-read.csv("activity.csv")
 data$date<-as.Date(data$date)
-data$interval<-as.factor(data$interval)
 ```
 
 
@@ -83,14 +82,14 @@ summary(data)
 ```
 
 ```
-##      steps             date               interval    
-##  Min.   :  0.00   Min.   :2012-10-01   0      :   61  
-##  1st Qu.:  0.00   1st Qu.:2012-10-16   5      :   61  
-##  Median :  0.00   Median :2012-10-31   10     :   61  
-##  Mean   : 37.38   Mean   :2012-10-31   15     :   61  
-##  3rd Qu.: 12.00   3rd Qu.:2012-11-15   20     :   61  
-##  Max.   :806.00   Max.   :2012-11-30   25     :   61  
-##  NA's   :2304                          (Other):17202
+##      steps             date               interval     
+##  Min.   :  0.00   Min.   :2012-10-01   Min.   :   0.0  
+##  1st Qu.:  0.00   1st Qu.:2012-10-16   1st Qu.: 588.8  
+##  Median :  0.00   Median :2012-10-31   Median :1177.5  
+##  Mean   : 37.38   Mean   :2012-10-31   Mean   :1177.5  
+##  3rd Qu.: 12.00   3rd Qu.:2012-11-15   3rd Qu.:1766.2  
+##  Max.   :806.00   Max.   :2012-11-30   Max.   :2355.0  
+##  NA's   :2304
 ```
 As we can see, the column "steps" is the only variable that has NA's values, with a total of 2304.
 
@@ -108,9 +107,9 @@ data2$steps<-replace(data2$steps,is.na(data2$steps),lookValue(data2$interval[is.
 The difference between data with NA's and without NA's can seen by calculaten the mean/median of total steps per day and making a histogram
 
 ```r
-#Calculate mean and median for the completed data sete
+#Calculate mean and median for the completed data set
 stepsPerDay2<-tapply(data2$steps,data2$date,sum)
-hist(stepsPerDay2,breaks=length(stepsPerDay2))
+hist(stepsPerDay2,breaks=10)
 ```
 
 ![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
@@ -156,3 +155,4 @@ xyplot(steps~interval|weekday,data=stepsWeekday,layout=c(1,2),type="l")
 ```
 
 ![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
+As can be seen in the plot, there is an important peak about the interval "800" on weekdays. This agree with the interval that contains the maximum number of steps, which is 835. In can be said that the exercise routine is often on weekdays.
