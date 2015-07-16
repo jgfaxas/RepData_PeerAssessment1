@@ -150,6 +150,8 @@ levels(data2$weekday)<-c("weekend","weekday")
 Later, a set arranged by 5-minutes interval and weekday/weekend is created. A plot shows the average number of steps taken, averaged across all weekday days or weekend days.
 
 ```r
+stepsWeekday<-aggregate(data2$steps,by=list(data2$interval,data2$weekday),FUN=mean)
+names(stepsWeekday)=c("interval","weekday","steps")
 library(lattice)
 xyplot(steps~interval|weekday,data=stepsWeekday,layout=c(1,2),type="l")
 ```
